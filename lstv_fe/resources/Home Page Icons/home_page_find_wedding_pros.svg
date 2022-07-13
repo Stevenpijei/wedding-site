@@ -1,0 +1,8 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <title>Artboard 1</title>
+  <g>
+    <circle cx="15" cy="15" r="14" fill="none" stroke="#ee4094" stroke-miterlimit="10" stroke-width="2"/>
+    <path d="M4.3,15A10.91,10.91,0,0,1,7.4,7.4,10.73,10.73,0,0,1,15,4.3" fill="none" stroke="#ee4094" stroke-miterlimit="10" stroke-width="2"/>
+    <path d="M26.5,23.1,38.3,34.9a2.48,2.48,0,0,1,0,3.4,2.41,2.41,0,0,1-3.4,0L23.1,26.5" fill="none" stroke="#ee4094" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

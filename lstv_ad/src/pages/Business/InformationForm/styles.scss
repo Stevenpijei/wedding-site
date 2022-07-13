@@ -1,0 +1,56 @@
+.business-information {
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    .pac-target-input {
+        height: 38px;
+        background-color: white;
+        border-radius: 4px;
+        padding-left: 8px;
+        padding-right: 8px;
+        border: 1px solid hsl(0, 0%, 80%);
+        font-size: 16px;
+        &::placeholder {
+            color: rgba(0, 0, 0, 0.87);
+        }
+    }
+    .MuiSelect-root {
+        background-color: white;
+        border-radius: 4px;
+        border: 1px solid hsl(0, 0%, 80%);
+        padding-left: 8px;
+    }
+    .MuiTextField-root {
+        min-height: 38px;
+        background-color: white;
+        border-radius: 4px;
+        border: 1px solid hsl(0, 0%, 80%);
+        .MuiInput-underline:before,
+        .MuiInput-underline:after {
+            display: none;
+        }
+        .MuiInputBase-root {
+            min-height: 38px;
+        }
+        .MuiInput-multiline {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        input {
+            padding-left: 8px;
+            padding-right: 8px;
+            font-size: 16px;
+        }
+    }
+    .PhoneInput {
+        input {
+            min-height: 38px;
+            padding: 6px 8px;
+            font-size: 16px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid hsl(0, 0%, 80%);
+        }
+    }
+}

@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lstv-migrator
+  labels:
+    app: lstv-migrator
+spec:
+  containers:
+    - name: lstv-migrator
+      image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2-migrator:1.1.504
+      resources:
+        requests:
+          cpu: "2000m"
+          memory: "2Gi"
+        limits:
+          cpu: "2000m"
+          memory: "2Gi"
+      env:
+        - name: PYTHONDONTWRITEBYTECODE
+          value: "1"
+        - name: PGDATABASE
+          value: "lstv2"
+        - name: PGHOST
+          value: "lstv2-staging-instance-1-us-east-2b.cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_psql_password
+        - name: PGUSER
+          value: "postgres"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_psql_url
+        - name: REDIS_URL
+          value: "redis://lstv-staging-redis.j8eh64.0001.use2.cache.amazonaws.com"
+        - name: LOGSTASH_URL
+          value: "logstash"
+        - name: ELASTICSEARCH_URL
+          value: "elasticsearch-master"
+        - name: LSTV1_DB
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_mysql_url

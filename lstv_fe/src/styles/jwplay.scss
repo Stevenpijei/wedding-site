@@ -1,0 +1,424 @@
+@import 'COLORS';
+
+/* Set the idle overlay to transparent white */
+.jwplayer.jw-skin-alaska.jw-state-idle .jw-controls {
+  background: rgba(255, 255, 255, 0);
+}
+/* Hide titles on complete */
+// .jwplayer.jw-skin-alaska.jw-state-complete .jw-title .jw-title-primary,
+// .jwplayer.jw-skin-alaska.jw-state-complete .jw-title .jw-title-secondary {
+//   display: none;
+// }
+.jw-controlbar.jw-reset {
+  padding: 0px 30px 20px 80px;
+}
+.jw-breakpoint-0 .jw-controlbar.jw-reset, .jw-breakpoint-1 .jw-controlbar.jw-reset {
+  padding: 0px;
+}
+// Hide default play SVG
+.jw-svg-icon-play path {	
+  display: none;
+}
+// Add our custom play button
+.jw-svg-icon.jw-svg-icon-play {
+  background-image: url('../images/PlayButton.svg');
+  background-repeat: no-repeat;
+  background-position-x: -1px;
+  background-position-y: -1px;
+}
+.jw-icon-inline.jw-icon-playback .jw-svg-icon.jw-svg-icon-play {
+  background-size: 24px;
+}
+// Hide default settigns SVG
+.jw-svg-icon-settings path {	
+  display: none;
+}
+// Add our custom settings button
+.jw-svg-icon.jw-svg-icon-settings {
+  background-image: url('../images/Setting.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+// Hide default share SVG
+.jw-icon.jw-icon-inline.jw-settings-sharing path {	
+  display: none;
+}
+// Add our custom share button
+.jw-icon.jw-icon-inline.jw-settings-sharing {
+  background-image: url('../images/Share.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px;
+}
+// Hide default fullscreen SVG
+.jw-svg-icon.jw-svg-icon-fullscreen-off path {	
+  display: none;
+}
+// Add our custom fullscreen button
+.jw-svg-icon.jw-svg-icon-fullscreen-off {
+  background-image: url('../images/FullScreen.svg');
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+// Hide default fullscreen SVG
+.jw-svg-icon.jw-svg-icon-fullscreen-on path {	
+  display: none;
+}
+// Add our custom fullscreen button
+.jw-svg-icon.jw-svg-icon-fullscreen-on {
+  background-image: url('../images/FullScreen.svg');
+  background-size: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+// Hide default volume SVG
+.jw-svg-icon-volume-100 path {	
+  display: none;
+}
+// Add our custom volume svg
+.jw-svg-icon-volume-100  {
+  background-image: url('../images/VolumeUp.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+// Hide default volume SVG
+.jw-svg-icon-volume-50 path {	
+  display: none;
+}
+// Add our custom volume svg
+.jw-svg-icon-volume-50  {
+  background-image: url('../images/VolumeDown.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+// Hide default volume SVG
+.jw-svg-icon-volume-0 path {	
+  display: none;
+}
+// Add our custom volume svg
+.jw-svg-icon-volume-0  {
+  background-image: url('../images/VolumeOff.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+//Moves volume control to right side
+.jw-icon.jw-icon-tooltip.jw-icon-volume.jw-button-color.jw-reset {
+  order: 3
+}
+
+
+// Hide rewind icon
+.jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-rewind {	
+  display: none;
+}
+
+/* Round, white play & restart buttons with black icons */
+.jwplayer.jw-skin-alaska .jw-display-controls .jw-display-icon-container,
+.jwplayer.jw-skin-alaska .jw-display-controls .jw-display-icon-container {
+  // background-color: $PRIMARY_COLOR;
+  // border-radius: 50%;
+  // width: 50px;
+  // height: 50px;
+}
+.jw-breakpoint-1  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 44px;
+}
+.jw-breakpoint-2  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 77px;
+}
+.jw-breakpoint-3  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 77px;
+}
+.jw-breakpoint-4  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 88px;
+}
+.jw-breakpoint-5  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 88px;
+}
+.jw-breakpoint-6  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 88px;
+}
+.jw-breakpoint-7  .jw-svg-icon.jw-svg-icon-play {
+  background-size: 88px;
+}
+
+
+// .jwplayer.jw-skin-alaska .jw-display-controls .jw-display-icon-container .jw-icon,
+// .jwplayer.jw-skin-alaska .jw-display-controls .jw-display-icon-container .jw-icon {
+//   color: white;
+//   width: 40px;
+//   height: 40px;
+//   padding: 5px;
+// }
+
+// /* Change play button colors on idle state, handle hover transitions */
+// .jwplayer.jw-skin-alaska.jw-state-idle .jw-display-controls .jw-display-icon-container {
+//   background-color: $PRIMARY_HIGHLIGHT;
+//   height: 80px;
+//   width: 80px;
+//   -webkit-transition: -webkit-transform 0.35s;
+//   transition: transform 0.35s;
+// }
+
+// .jwplayer.jw-skin-alaska.jw-state-idle .jw-display-controls .jw-display-icon-container .jw-icon {
+//   color: #fff;
+//   height: 40px;
+//   width: 40px;
+//   padding: 20px;
+// }
+
+
+// /* Shrink play button on smaller breakpoints */
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-3 .jw-display-controls .jw-display-icon-container,
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-2 .jw-display-controls .jw-display-icon-container  {
+//   height: 60px;
+//   width: 60px;
+// }
+
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-1 .jw-display-controls .jw-display-icon-container,
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-0 .jw-display-controls .jw-display-icon-container {
+//   height: 40px;
+//   width: 40px;
+// }
+
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-3 .jw-display-controls .jw-display-icon-container .jw-icon,
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-2 .jw-display-controls .jw-display-icon-container .jw-icon {
+//   height: 40px;
+//   width: 40px;
+//   padding: 10px;
+// }
+
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-1 .jw-display-controls .jw-display-icon-container .jw-icon,
+// .jwplayer.jw-skin-alaska.jw-state-idle.jw-breakpoint-0 .jw-display-controls .jw-display-icon-container .jw-icon {
+//   height: 20px;
+//   width: 20px;
+//   padding: 10px;
+// }
+
+// .jwplayer.jw-skin-alaska.jw-state-idle .jw-display-controls .jw-display-icon-container:hover {
+//    background-color: $PRIMARY_COLOR;
+// }
+
+.jwplayer.jw-skin-alaska.jw-state-idle .jw-display-controls .jw-display-icon-container .jw-icon:hover {
+  color: $MID_GRAY_COLOR;
+}
+
+.jwplayer.jw-skin-alaska.jw-state-paused .jw-controls {
+  background-color: rgb(201,196,196);
+  background: linear-gradient(0deg, rgba(201,196,196,0.3) 0%, rgba(123, 113, 163, 0.5) 64%);
+}
+
+
+/* Customize font style and positioning for titles */
+.jwplayer.jw-skin-alaska.jw-state-idle .jw-title {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Apply new styles to video title and description, handle transitions */
+.jwplayer.jw-skin-alaska .jw-title-primary {
+  font-size: 48px;
+  padding: 30px;
+  color: #1E1E1E;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  padding-bottom: 15px;
+  -webkit-transition: -webkit-transform 0.35s;
+  transition: transform 0.35s;
+}
+
+/* Apple new styles to video description */
+.jwplayer.jw-skin-alaska .jw-title-secondary {
+  font-size: 18px;
+  max-width: 70%;
+  font-weight: 500;
+  opacity: 0;
+  margin: 0 auto;
+  color: #1E1E1E;
+  text-align: center;
+  font-family: 'Merriweather', serif;
+  white-space: normal;
+  line-height: 1.3;
+  -webkit-transition: opacity 0.2s, -webkit-transform 0.35s;
+  transition: opacity 0.2s, transform 0.35s;
+  -webkit-transition-delay: 0.08s;
+  transition-delay: 0.08s;
+  -webkit-transition-duration: 0.35s;
+  transition-duration: 0.35s;
+}
+
+/* Decrease font size on medium-small breakpoints */
+.jwplayer.jw-skin-alaska.jw-breakpoint-3 .jw-title-primary,
+.jwplayer.jw-skin-alaska.jw-breakpoint-2 .jw-title-primary,
+.jwplayer.jw-skin-alaska.jw-breakpoint-1 .jw-title-primary,
+.jwplayer.jw-skin-alaska.jw-breakpoint-0 .jw-title-primary {
+  font-size: 22px;
+}
+
+.jwplayer.jw-skin-alaska.jw-breakpoint-3 .jw-title-secondary,
+.jwplayer.jw-skin-alaska.jw-breakpoint-2 .jw-title-secondary {
+  font-size: 14px;
+}
+
+/* Hide the description on smallest breakpoints */
+.jwplayer.jw-skin-alaska.jw-breakpoint-1 .jw-title-secondary,
+.jwplayer.jw-skin-alaska.jw-breakpoint-0 .jw-title-secondary {
+  display: none;
+}
+
+/* Change colors and remove gradient shadow for control bar, change icon color on pause */
+.jwplayer.jw-skin-alaska .jw-display {
+  padding-bottom: 45px;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar {
+//   background-color: ;
+}
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-button-container {
+  // height: 30px;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-button-container .jw-button-color {
+  color: $MID_GRAY_COLOR;
+}
+
+.jwplayer.jw-skin-alaska.jw-state-paused .jw-controlbar .jw-button-container .jw-button-color {
+  color: $MID_GRAY_COLOR;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-button-container .jw-button-color:hover {
+  color: $PRIMARY_COLOR;
+}
+.jw-reset.jw-button-container {
+  flex-wrap: nowrap;
+}
+// Play Pause button styling
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-button-container .jw-icon-playback {
+    background-color: $PRIMARY_COLOR;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    color: white;
+    left: 35px;
+    top: 0px;
+    position: absolute;
+}
+ .jwplayer.jw-skin-alaska.jw-flag-small-player .jw-controlbar .jw-button-container .jw-icon-playback {
+    left: unset;
+    top: unset;
+    position: relative;
+    width: 30px;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-button-container .jw-icon-playback:hover {
+    background-color: $PRIMARY_HIGHLIGHT;
+    border-radius: 50%;
+    color: white;
+}
+
+/* Move tooltips closer to control bar with inline timeslider, change colors, round corners, remove shadow */
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-tooltip {
+  bottom: 70%;
+  box-shadow: none;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-tooltip.jw-open {
+  border-radius: 5px;
+  color: $TEXT_AND_SVG_BLACK;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-tooltip .jw-text {
+  background-color: $TEXT_AND_SVG_BLACK;
+  border-radius: 5px;
+  border: 0;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-text {
+  color: white;
+}
+
+.jwplayer.jw-skin-alaska .jw-volume-tip,
+.jwplayer.jw-skin-alaska .jw-time-tip {
+  padding-bottom: 0;
+}
+
+
+/* Customize colors of volume control knob */
+.jwplayer.jw-skin-alaska .jw-overlay .jw-slider-volume .jw-slider-container .jw-knob {
+//   background-color: WHITE;
+  background-color: $MID_GRAY_COLOR;
+  border: 3px solid $PRIMARY_COLOR;
+}
+.jwplayer.jw-skin-alaska .jw-slider-time.jw-background-color.jw-reset.jw-slider-horizontal.jw-reset > .jw-slider-container {
+  height: 2px !important;
+}
+
+
+/* Customize colors of timeslider */
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-slider-time .jw-slider-container .jw-rail {
+  background-color: $MID_GRAY_COLOR;
+  border-radius: 5px;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-slider-time .jw-slider-container .jw-buffer {
+  background-color: $DARK_GRAY_COLOR;
+  border-radius: 5px;
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-slider-time .jw-slider-container .jw-progress {
+  background-color: $PRIMARY_COLOR;
+  border-radius: 5px;
+  
+}
+
+.jwplayer.jw-skin-alaska .jw-controlbar .jw-slider-time .jw-slider-container .jw-knob {
+  background-color: $MID_GRAY_COLOR;
+  border: 3px solid $PRIMARY_COLOR;
+}
+
+
+/* Customize colors/opacity of the settings menu */
+.jwplayer.jw-skin-alaska .jw-settings-menu {
+  background-color: $TEXT_AND_SVG_BLACK;
+  
+}
+
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-topbar {
+  background-color: $TEXT_AND_SVG_BLACK;
+  border-radius: 5px;
+}
+
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-topbar .jw-icon:hover {
+  color: $MID_GRAY_COLOR ;
+}
+
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-submenu {
+  background-color: $TEXT_AND_SVG_BLACK;
+  border-radius: 5px;
+}
+
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-content-item {
+  color:$MID_GRAY_COLOR ;
+}
+
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-content-item:hover,
+.jwplayer.jw-skin-alaska .jw-settings-menu .jw-settings-item-active {
+  color: $PRIMARY_COLOR;
+  font-weight: bold;
+}
+
+.jw-breakpoint-7 .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-playback {
+  width: 50px;
+  height: 50px;
+} 
+.jw-breakpoint-7 .jw-icon.jw-icon-inline.jw-button-color.jw-reset.jw-icon-playback .jw-svg-icon.jw-svg-icon-play {
+  width: 24px;
+  height: 24px;
+} 

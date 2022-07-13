@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lstv-celery-deployment-prod
+  labels:
+    app: lstv-app-celery
+spec:
+  replicas: 4
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: lstv-app-celery
+  template:
+    metadata:
+      labels:
+        app: lstv-app-celery
+    spec:
+      #      affinity:
+      #        podAntiAffinity:
+      #          requiredDuringSchedulingIgnoredDuringExecution:
+      #            - labelSelector:
+      #                matchExpressions:
+      #                  - key: app
+      #                    operator: In
+      #                    values:
+      #                      - lstv-app-celery
+      #              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: lstv-app-celery
+          image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2-celery-prod:2.0.857
+          resources:
+            requests:
+              cpu: "666m"
+              memory: "1Gi"
+            limits:
+              cpu: "2000m"
+              memory: "2Gi"
+          env:
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: PGDATABASE
+              value: "lstv2"
+            - name: PGHOST
+              value: "lstv-prod.cluster-cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+            - name: HUBSPOT_API_KEY
+              value: "8ac04a74-8690-4500-be12-2948e8db7f44"
+            - name: MAILCHIMP_API_TOKEN
+              value: "9817608429c7f9b59937816710123a8a-us13"
+            - name: MAILCHIMP_AUDIENCE_ID
+              value: "1c5967897e"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_password
+            - name: PGUSER
+              value: "root"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_url
+            - name: REDIS_URL
+              value: "redis://lstv-redis-prod.j8eh64.ng.0001.use2.cache.amazonaws.com"
+            - name: LOGSTASH_URL
+              value: "logstash"
+            - name: ELASTICSEARCH_URL
+              value: "elasticsearch-master"
+            - name: LSTV1_DB
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_mysql_url
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: aws_secret_access_key
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: aws_access_key_id
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: third-party-saas
+                  key: sendgrid_api_key
+

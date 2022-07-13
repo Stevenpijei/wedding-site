@@ -1,0 +1,158 @@
+version: '3'
+services:
+  elasticsearch:
+    build:
+      context: ./docker/elasticsearch/
+      args:
+        ELK_VERSION: 7.2.0
+    volumes:
+      - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./docker/elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+    networks:
+      - elk
+
+  kibana:
+    build:
+      context: ./docker/kibana/
+      args:
+        ELK_VERSION: 7.2.0
+    volumes:
+      - ./docker/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - 5602:5601
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+  
+  web:
+    restart: always
+    build: 
+      context: ./lstv_be
+      dockerfile: Dockerfile-api-local
+    container_name: django
+    working_dir: /src
+    volumes:
+      - ./lstv_be:/src
+    ports:
+      - 8000:8000
+    links:
+      - redis
+      - db
+    depends_on:
+      - redis
+      - db
+      - elasticsearch
+      - celery
+    entrypoint: bash -c " sleep 100 && if [[ $$(pg_isready -h db) == *accept* ]]; then pip install -r requirements.txt && python manage.py migrate && python manage.py runserver 0.0.0.0:8000 ;else echo 'PG not ready, will retry in 100 seconds' && exit 1;fi"
+    networks:
+        - lstv2_net
+    environment:
+         - RELEASE_STAGE=development
+         - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+         - POSTGRES_USER=lstv_user
+         - POSTGRES_PASSWORD=lstv_pass
+         - POSTGRES_DB=lstv2
+         - POSTGRES_HOST=db
+         - PYTHONUNBUFFERED=1
+         - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+         - REDIS_URL=redis://redis:6379/0
+         - ELASTICSEARCH_URL=elasticsearch:9200
+  
+  db:
+    container_name: postgres
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    user: postgres
+    environment:
+         - POSTGRES_USER=lstv_user
+         - POSTGRES_PASSWORD=lstv_pass
+         - POSTGRES_DB=lstv2
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/lstv2.db:/usr/src/lstv2.db
+    networks:
+      - lstv2_net
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+     - 6379:6379
+    networks:
+        - lstv2_net
+  
+  celery:
+    restart: always
+    build: 
+      context: ./lstv_be
+      dockerfile: Dockerfile-api-local
+    working_dir: /src
+    environment:
+      - C_FORCE_ROOT=true
+      - DJANGO_SETTINGS_MODULE=lstv_be.settings
+      - RELEASE_STAGE=development
+      - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+      - POSTGRES_USER=lstv_user
+      - POSTGRES_PASSWORD=lstv_pass
+      - POSTGRES_DB=lstv2
+      - POSTGRES_HOST=db
+      - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+      - REDIS_URL=redis://redis:6379/0
+      - ELASTICSEARCH_URL=elasticsearch:9200
+    container_name: celery
+    volumes:
+      - ./lstv_be:/src
+    links:
+      - redis
+      - db
+    depends_on:
+      - redis
+      - db
+    command: bash -c "sleep 10 && pip install -r requirements.txt && python3 manage.py Celery"
+    networks:
+      - lstv2_net
+
+  flower:
+    restart: always
+    build: ./lstv_be
+    environment:
+      - C_FORCE_ROOT=true
+      - DJANGO_SETTINGS_MODULE=lstv_be.settings
+      - RELEASE_STAGE=development
+      - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_DB=postgres
+      - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+      - REDIS_URL=redis://redis:6379/0
+    container_name: flower
+    working_dir: /src
+    volumes:
+      - ./lstv_be:/src
+    links:
+      - redis
+      - db
+    depends_on:
+      - redis
+      - db
+      - celery
+    command: bash -c "sleep 10 && flower -A lstv_be"
+    ports:
+      - 5555:5555
+    networks:
+        - lstv2_net
+
+networks:
+  elk:
+    driver: bridge
+  lstv2_net:
+    driver: bridge

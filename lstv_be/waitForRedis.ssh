@@ -1,0 +1,16 @@
+#!/bin/bash
+
+finished=false
+while ! $finished; do
+    NUM=$(redis-cli -h lstv2-redis.j8eh64.ng.0001.use2.cache.amazonaws.com --raw llen celery)
+    echo "${NUM} celery jobs still pending"
+    if [[ $NUM -eq 0 ]]
+    then
+        echo "we're done"
+        finished=true
+    else
+        sleep 10
+    fi
+done
+
+echo "done"

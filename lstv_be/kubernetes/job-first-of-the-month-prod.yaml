@@ -1,0 +1,71 @@
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cron-job-first-of-the-month
+spec:
+  schedule: "0 12 1 * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cron-job-first-of-the-month
+            image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2-celery-prod:2.0.857
+            args:
+            - /bin/sh
+            - -c
+            - python manage.py job_first_day_of_the_month
+            resources:
+              requests:
+                cpu: "666m"
+              limits:
+                cpu: "666m"
+            env:
+              - name: PYTHONDONTWRITEBYTECODE
+                value: "1"
+              - name: PGDATABASE
+                value: "lstv2"
+              - name: PGHOST
+                value: "lstv-prod.cluster-cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_psql_password
+              - name: PGUSER
+                value: "root"
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_psql_url
+              - name: REDIS_URL
+                value: "redis://lstv-redis-prod.j8eh64.ng.0001.use2.cache.amazonaws.com"
+              - name: LOGSTASH_URL
+                value: "logstash"
+              - name: ELASTICSEARCH_URL
+                value: "elasticsearch-master"
+              - name: LSTV1_DB
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_mysql_url
+              - name: AWS_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: aws-secret
+                    key: aws_secret_access_key
+              - name: AWS_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: aws-secret
+                    key: aws_access_key_id
+              - name: SENDGRID_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: third-party-saas
+                    key: sendgrid_api_key
+          restartPolicy: Never

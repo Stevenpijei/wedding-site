@@ -1,0 +1,149 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: lstv-app-server
+  labels:
+    app: lstv-app-server
+  annotations:
+    #service.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:058244107102:certificate/57a02ed4-6a02-42a1-b0c1-cc6197dd9eff"
+    service.kubernetes.io/aws-load-balancer-backend-protocol: http
+    #service.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+    #service.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      name: http
+      targetPort: 8000
+  selector:
+    app: lstv-app-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lstv-app-deployment
+  labels:
+    app: lstv-app-server
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: lstv-app-server
+  template:
+    metadata:
+      labels:
+        app: lstv-app-server
+    spec:
+      initContainers:
+        - name: django-db-migrate
+          image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2:2.1.890
+          command: [ 'sh', '-c', 'python manage.py migrate' ]
+          env:
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: PGDATABASE
+              value: "lstv2"
+            - name: PGHOST
+              value: "lstv2-staging-instance-1-us-east-2b.cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_password
+            - name: PGUSER
+              value: "postgres"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_url
+            - name: REDIS_URL
+              value: "redis://lstv-staging-redis.j8eh64.0001.use2.cache.amazonaws.com"
+            - name: LOGSTASH_URL
+              value: "logstash"
+            - name: ELASTICSEARCH_URL
+              value: "elasticsearch-master"
+            - name: LSTV1_DB
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_mysql_url
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - lstv-app-server
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: lstv-app-server
+          image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2:2.1.890
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8000
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+          env:
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: PGDATABASE
+              value: "lstv2"
+            - name: PGHOST
+              value: "lstv2-staging-instance-1-us-east-2b.cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_password
+            - name: PGUSER
+              value: "postgres"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_psql_url
+            - name: REDIS_URL
+              value: "redis://lstv-staging-redis.j8eh64.0001.use2.cache.amazonaws.com"
+            - name: LOGSTASH_URL
+              value: "logstash"
+            - name: ELASTICSEARCH_URL
+              value: "elasticsearch-master"
+            - name: LSTV1_DB
+              valueFrom:
+                secretKeyRef:
+                  name: lstv2-app-server-db-urls
+                  key: db_mysql_url
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: aws_secret_access_key
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: aws_access_key_id
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: third-party-saas
+                  key: sendgrid_api_key

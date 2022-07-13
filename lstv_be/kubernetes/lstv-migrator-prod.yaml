@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lstv-migrator
+  labels:
+    app: lstv-migrator
+spec:
+  containers:
+    - name: lstv-migrator
+      image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv-migrator-prod:1.0.532
+      resources:
+        requests:
+          cpu: "2000m"
+          memory: "2Gi"
+        limits:
+          cpu: "2000m"
+          memory: "2Gi"
+      env:
+        - name: PYTHONDONTWRITEBYTECODE
+          value: "1"
+        - name: PGDATABASE
+          value: "lstv2"
+        - name: PGHOST
+          value: "lstv-prod.cluster-cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+        - name: HUBSPOT_API_KEY
+          value: "8ac04a74-8690-4500-be12-2948e8db7f44"
+        - name: MAILCHIMP_API_TOKEN
+          value: "9817608429c7f9b59937816710123a8a-us13"
+        - name: MAILCHIMP_AUDIENCE_ID
+          value: "1c5967897e"
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_psql_password
+        - name: PGUSER
+          value: "root"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_psql_url
+        - name: REDIS_URL
+          value: "redis://lstv-redis-prod.j8eh64.ng.0001.use2.cache.amazonaws.com"
+        - name: LOGSTASH_URL
+          value: "logstash"
+        - name: ELASTICSEARCH_URL
+          value: "elasticsearch-master"
+        - name: LSTV1_DB
+          valueFrom:
+            secretKeyRef:
+              name: lstv2-app-server-db-urls
+              key: db_mysql_url
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-secret
+              key: aws_secret_access_key
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-secret
+              key: aws_access_key_id
+        - name: SENDGRID_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: third-party-saas
+              key: sendgrid_api_key
+

@@ -1,0 +1,30 @@
+FROM python:3.8.6
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client redis-tools  mariadb-client-10.3 apt-utils ffmpeg nano mc  \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+COPY requirements.txt ./
+COPY full-migrate.ssh ./
+COPY waitForRedis.ssh ./
+COPY waitForRedis-prod.ssh ./
+RUN pip install -r requirements.txt
+COPY . .
+
+ARG RELEASE_STAGE_DEFAULT=staging-mig
+ENV RELEASE_STAGE=${RELEASE_STAGE_DEFAULT}
+
+RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+RUN echo "\pset pager off" >> ~/.psqlrc
+RUN echo "\x auto" >> ~/.psqlrc
+
+RUN echo 'ping localhost &' > /bootstrap.sh
+RUN echo 'sleep infinity' >> /bootstrap.sh
+RUN chmod +x /bootstrap.sh
+RUN chmod +x ./full-migrate.ssh
+RUN chmod +x ./waitForRedis.ssh
+RUN chmod +x ./waitForRedis-prod.ssh
+CMD /bootstrap.sh
+

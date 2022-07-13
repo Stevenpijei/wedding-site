@@ -1,0 +1,13 @@
+.data-table {
+    .clickable {
+        .MuiDataGrid-row.Mui-even {
+            cursor: pointer;
+        }
+    }
+    .MuiDataGrid-colCell {
+        outline: none !important;
+    }
+    .MuiDataGrid-row:nth-child(2n) {
+        background-color: #dddddd;
+    }
+}

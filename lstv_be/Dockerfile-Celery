@@ -1,0 +1,20 @@
+FROM python:3.8.6
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client redis-tools  mariadb-client-10.3 apt-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+COPY . .
+
+ARG RELEASE_STAGE_DEFAULT=production
+ENV RELEASE_STAGE=${RELEASE_STAGE_DEFAULT}
+
+RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+RUN echo "\pset pager off" >> ~/.psqlrc
+RUN echo "\x auto" >> ~/.psqlrc
+
+CMD ["celery", "-A", "lstv_be", "worker", "-l", "info"]

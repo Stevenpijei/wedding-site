@@ -1,0 +1,16 @@
+.social-links {
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    p {
+        height: 32px;
+        margin-bottom: 0px;
+        display: flex;
+        align-items: center;
+    }
+    .MuiIconButton-root {
+        flex-grow: 0;
+    }
+}

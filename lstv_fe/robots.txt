@@ -1,0 +1,3 @@
+Sitemap: https://lovestoriestv.com/sitemap_index.xml
+User-agent: *
+Allow: /

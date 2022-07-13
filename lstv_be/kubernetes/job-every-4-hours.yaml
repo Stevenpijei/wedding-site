@@ -1,0 +1,50 @@
+
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: lstv2-every-4-hours-maintenance
+spec:
+  schedule: "30 */4 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: lstv2-every-4-hours-maintenance
+            image: 058244107102.dkr.ecr.us-east-2.amazonaws.com/lstv2-celery:2.0.317
+            args:
+            - /bin/sh
+            - -c
+            - python manage.py
+            resources:
+              requests:
+                cpu: "666m"
+              limits:
+                cpu: "666m"
+            env:
+              - name: PYTHONDONTWRITEBYTECODE
+                value: "1"
+              - name: PGDATABASE
+                value: "lstv2"
+              - name: PGHOST
+                value: "lstv2-rds.cluster-custom-cloqzmsbciiq.us-east-2.rds.amazonaws.com"
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_psql_password
+              - name: PGUSER
+                value: "postgres"
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_psql_url
+              - name: REDIS_URL
+                value: "redis://lstv2-redis-master"
+              - name: LSTV1_DB
+                valueFrom:
+                  secretKeyRef:
+                    name: lstv2-app-server-db-urls
+                    key: db_mysql_url
+          restartPolicy: Never

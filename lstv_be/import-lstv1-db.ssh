@@ -1,0 +1,92 @@
+echo "** START" > migration_span.txt
+date >> migration_span.txt
+
+function migrate_lstv1_db {
+
+    echo "cleaning lstv1 migration staging DB"
+
+    psql lstv1 -c "delete from lstv_properties"
+    psql lstv1 -c "delete from post_views_detail"
+    psql lstv1 -c "delete from photo_library"
+    psql lstv1 -c "delete from postmeta"
+    psql lstv1 -c "delete from posts"
+    psql lstv1 -c "delete from term_relationships"
+    psql lstv1 -c "delete from term_taxonomy"
+    psql lstv1 -c "delete from terms"
+    psql lstv1 -c "delete from user_type_categories"
+    psql lstv1 -c "delete from usermeta"
+    psql lstv1 -c "delete from users"
+    psql lstv1 -c "delete from video_library"
+
+
+    echo "quick-migrating lstv1 data into lstv2 mig-db"
+    echo "post views details"
+
+    mysqldump --compatible=postgresql  -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv post_views_detail > post_views_detail.sql
+    psql lstv1 < post_views_detail.sql
+
+    echo "postmeta"
+
+    mysqldump --compatible=postgresql  -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv postmeta --where="meta_key in ('video_type','video_short_code','dp_video_code','dp_video_url','dp_video_urll','video_type','video_typee','wedding_date','dp_video_poster','video_poster_image','processional_song','spouse_name','wedding_date','wedding_hash_tag','your_facebook_page','bride_or_groom_email','your_instagram_handle','your_spouse_instagram_handle','venue_type','ceremony_venue_website','ceremony_venue_email','reception_venue_website','reception_venue_email')" | sed "s/\\\\'/''/g"   > postmeta.sql
+    psql lstv1 < postmeta.sql
+
+    echo "posts"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv posts  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g" | sed "s/\\\\'/''/g" | sed "s/\\\\'/''/g"  > posts.sql
+    psql lstv1 < posts.sql
+
+
+    echo "terms"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv terms  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g" | sed "s/\\\\'/''/g"   > terms.sql
+    psql lstv1 < terms.sql
+
+    echo "video_library"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv video_library  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > video_library.sql
+    psql lstv1 < video_library.sql
+
+
+    echo "photo_library"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv photo_library  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > photo_library.sql
+    psql lstv1 < photo_library.sql
+
+
+    echo "users"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv users  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > users.sql
+    psql lstv1 < users.sql
+
+    echo "usermeta"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv usermeta  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > usermeta.sql
+    psql lstv1 < usermeta.sql
+
+    echo "term_relations"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv term_relationships  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > term_relationships.sql
+    psql lstv1 < term_relationships.sql
+
+    echo "term_taxonomy"
+
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv term_taxonomy  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > term_taxonomy.sql
+    psql lstv1 < term_taxonomy.sql
+
+    echo "user_type_categories"
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv user_type_categories | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > user_type_categories.sql
+    psql lstv1 < user_type_categories.sql
+
+    echo "lstv_properties"
+    mysqldump --compatible=postgresql -t --host=lstv-last-db.cloqzmsbciiq.us-east-2.rds.amazonaws.com -uroot -pIAjyaravhesJoh0 lstv lstv_properties  | sed "s/'0000-00-00 00:00:00'/NULLIF('0000-00-00 00:00:00','0000-00-00 00:00:00')::timestamp/g" | sed "s/\\\\'/''/g"  > lstv_properties.sql
+    psql lstv1 < lstv_properties.sql
+}
+
+migrate_lstv1_db
+
+echo "imported..."
+
+pg_dump lstv1 > lstv1.db
+
+echo "exported to lstv1.db"
+

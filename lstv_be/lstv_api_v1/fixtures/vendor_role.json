@@ -1,0 +1,237 @@
+TOP LEVEL CLASSIFICATIN
+   - ATOMIZED ROLES
+      - EVENT ASSOCIATION
+
+
+Example:
+
+     "Fashion Designer"
+             - Dress Designer
+                - Bride's dress
+                - Bridal Party dress
+             - Shoe Designer
+             - Headpiece Designer
+             - Suit Designer
+
+
+
+-- Registry/Gifts
+
+    "name": "Bridal Party Gifts",
+    "slug": "bridal-party-gifts"
+
+    "name": "Gift Ideas",
+    "slug": "gift-ideas"
+
+    "name": "Registry",
+    "slug": "registry"
+
+    "name": "Wedding Favors",
+    "slug": "wedding-favors"
+
+---------------------------------------------------------------
+
+- PLANNER
+
+    "name": "Event Planner",
+    "slug": "event-planner"
+
+     "name": "Day-Of-Coordinator",
+    "slug": "day-of-coordinator"
+
+---------------------------------------------------------------
+
+--FASHION DESIGNER
+
+  -  "name": "Wedding Dress Designer",
+    "slug": "dress-designer"
+
+-     "name": "Groom's Shoe Designer",
+    "slug": "groom-shoe-designer"
+
+-     "name": "Groom or Bride Suit Designer",
+    "slug": "groom-or-bride-suit-designer"
+
+ -    "name": "Bridal Party Suit Designer",
+    "slug": "bridal-party-suit-designer"
+
+ -    "name": "Bride's Shoes Designer",
+    "slug": "bride-shoe-designer"
+
+     "name": "Children's Apparel",
+     "slug": "childrens-apparel"
+
+    "name": "Headpiece Designer",
+    "slug": "headpiece-designer"
+
+ -   "name": "Bridal Party Dress Designer",
+    "slug": "bridal-party-dress-designer"
+
+- BAKERY/Wedding Cakes
+
+    "name": "Bakery",
+    "slug": "bakery"
+
+     "name": "Wedding Cakes",
+    "slug": "wedding-cakes"
+
+- MUSIC/Live Performance/Dance
+
+    "name": "Band",
+    "slug": "band"
+
+    "name": "DJ",
+    "slug": "dj"
+
+     "name": "Soloist",
+    "slug": "soloist"
+
+    "name": "Ensemble",
+    "slug": "ensemble"
+
+    "name": "Variety Acts",
+    "slug": "variety-acts"
+
+    "name": "Dance Instruction",
+    "slug": "dance-instruction"
+
+
+---------------------------------------------------------------
+
+- FOOD/Beverage Services
+
+    "name": "Bar & Beverage Services",
+    "slug": "bar-and-beverage-services"
+
+    "name": "Catering Services",
+    "slug": "catering-services"
+
+    "name": "Service Staff",
+    "slug": "service-staff"
+
+
+- Print/Creative/Social Media
+
+    "name": "Caricature Artist",
+    "slug": "caricature-artist"
+
+    "name": "Signage",
+    "slug": "signage"
+
+    "name": "Stationery",
+    "slug": "stationery"
+
+    "name": "Invitations",
+    "slug": "invitations"
+
+    "name": "Calligraphy",
+    "slug": "calligraphy"
+
+    "name": "Hashtag Author",
+    "slug": "hashtag-author"
+
+    "name": "Social Media Planner",
+    "slug": "social-media-planner"
+
+    "name": "Speech Writer",
+    "slug": "speech-writer"
+
+---------------------------------------------------------------
+
+- SPA/SALON/MAKEUP
+
+    "name": "Spray Tanning",
+    "slug": "spray-tanning"
+
+    "name": "Spa",
+    "slug": "spa"
+
+    "name": "Hairstylist",
+    "slug": "hairstylist"
+
+    "name": "Makeup Artist",
+    "slug": "makeup-artist"
+
+    "name": "Bridal Salon",
+    "slug": "bridal-salon"
+
+
+---------------------------------------------------------------
+
+ - LIGHTING/SOUND
+
+    "name": "Sound Design",
+    "slug": "sound-design"
+
+    "name": "Lighting Design",
+    "slug": "lighting-design"
+
+----------------------------------------------------------------
+
+  RENTALS
+
+
+    "name": "Photobooth Provider",
+    "slug": "photobooth-provider"
+
+    "name": "Event Rentals",
+    "slug": "event-rentals"
+
+
+---------------------------------------------------------------
+
+  DESIGN/DECOR
+
+    "name": "Florist",
+    "slug": "florist"
+
+    "name": "Wedding Designer",
+    "slug": "wedding-designer"
+
+    "name": "Decor",
+    "slug": "decor"
+
+    "name": "Event Designer",
+    "slug": "event-designer"
+
+---------------------------------------------------------------
+
+  LODGING/TRANSPORTATION/TRAVEL
+
+    "name": "Wedding Transportation",
+    "slug": "transportation"
+
+    "name": "Cruise Operator",
+    "slug": "cruise-operator"
+
+    "name": "Guest-Accommodations",
+    "slug": "guest-accommodations"
+
+
+---------------------------------------------------------------
+  JEWELRY
+
+    "name": "Jewelry Designer",
+    "slug": "jewelry-designer"
+
+    "name": "Jewelry Shop",
+    "slug": "jewelry-shop"
+
+
+---------------------------------------------------------------
+
+
+    "name": "Officiant",
+    "slug": "officiant"
+
+    "name": "Venue",
+    "slug": "venue"
+
+    "name": "Photographer",
+    "slug": "photographer"
+
+    "name": "Boudoir Photographer",
+    "slug": "boudoir-photographer"
+
+    "name": "Green Weddings",
+    "slug": "green-weddings"

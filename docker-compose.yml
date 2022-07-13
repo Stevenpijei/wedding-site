@@ -1,0 +1,190 @@
+version: '3'
+services:
+  elasticsearch:
+    build:
+      context: ./docker/elasticsearch/
+      args:
+        ELK_VERSION: 7.2.0
+    volumes:
+      - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./docker/elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+    networks:
+      - elk
+
+  logstash:
+    build:
+      context: ./docker/logstash/
+      args:
+        ELK_VERSION: 7.2.0
+    volumes:
+      - ./docker/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./docker/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5000:5000"
+      - "9600:9600"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    build:
+      context: ./docker/kibana/
+      args:
+        ELK_VERSION: 7.2.0
+    volumes:
+      - ./docker/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    ports:
+      - "5602:5601"
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+  nginx:
+    image: nginx:latest
+    container_name: nginx-django
+    ports:
+      - "8000:8000"
+    volumes:
+      #- ./src:/src
+      - ./docker/dev-config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+    networks:
+      - lstv2_net
+  nginx-static:
+    image: nginx:latest
+    container_name: nginx-static
+    ports:
+      - "80:80"
+    volumes:
+      - /home/ubuntu/dev/lstv2/lstv_fe/dist:/var/www
+      - ./docker/dev-config/nginx-static:/etc/nginx/conf.d
+      - ./docker/dev-config/nginx-static/.htpasswd:/etc/nginx/.htpasswd
+    networks:
+      - lstv2_net
+  web:
+    restart: always
+    build: .
+    container_name: django
+    volumes:
+      - ./lstv_be:/src
+    expose:
+      - "8000"
+    links:
+      - redis
+      - db
+    depends_on:
+      - redis
+      - db
+    command: bash -c "sleep 10 && cd /src && pip install -r requirements.txt && python manage.py makemigrations && python manage.py migrate && uwsgi  --module=lstv_be.wsgi:application  --env DJANGO_SETTINGS_MODULE=lstv_be.settings --master  --processes=5   --harakiri=20 --max-requests=5000  --py-autoreload=1 --vacuum --http=0.0.0.0:8000"
+    networks:
+        - lstv2_net
+    environment:
+         - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+         - POSTGRES_PASSWORD=postgress
+         - POSTGRES_DB=postgres
+         - PYTHONUNBUFFERED=1
+         - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+         - POSTGRES_USER=lstv_user
+         - POSTGRES_PASSWORD=lstv_pass
+         - POSTGRES_DB=lstv2
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/postgres-data:/var/lib/postgresql/data
+    networks:
+      - lstv2_net
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+     - '6379:6379'
+    networks:
+        - lstv2_net
+  celery:
+    restart: always
+    build: .
+    environment:
+      - C_FORCE_ROOT=true
+      - DJANGO_SETTINGS_MODULE=lstv_be.settings
+      - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+      - POSTGRES_PASSWORD=postgress
+      - POSTGRES_DB=postgres
+      - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+    container_name: celery
+    volumes:
+      - ./lstv_be:/src
+    links:
+      - redis
+      - db
+      - web
+    depends_on:
+      - redis
+      - db
+      - web
+    #command: bash -c "sleep 10  &&  cd /src && pip install -r requirements.txt && celery worker -A lstv_be"
+    command: bash -c "sleep 10  &&  cd /src && pip install -r requirements.txt && python3 manage.py Celery"
+    networks:
+      - lstv2_net
+  flower:
+    restart: always
+    build: .
+    environment:
+      - C_FORCE_ROOT=true
+      - DJANGO_SETTINGS_MODULE=lstv_be.settings
+    container_name: flower
+    volumes:
+      - ./lstv_be:/src
+    links:
+      - redis
+      - db
+      - web
+    depends_on:
+      - redis
+      - db
+      - web
+    command: bash -c "sleep 10  &&  cd /src && pip install -r requirements.txt && flower -A lstv_be"
+    ports:
+      - 5555:5555
+    networks:
+        - lstv2_net
+  clock:
+    restart: always
+    environment:
+       - DJANGO_SETTINGS_MODULE=lstv_be.settings
+       - DATABASE_URL=postgres://lstv_user:lstv_pass@db:5432/lstv2
+       - LSTV2_API_KEY_ZERO_BOUNCE=21bb1877409d4bb4819ee059bad312bc
+    build: .
+    container_name: clock
+    volumes:
+      - ./lstv_be:/src
+    links:
+      - redis
+      - db
+      - web
+    depends_on:
+      - redis
+      - db
+      - web
+    command: bash -c "sleep 10  &&  cd /src && pip install -r requirements.txt && python clock.py"
+    networks:
+        - lstv2_net
+
+networks:
+  elk:
+    driver: bridge
+  lstv2_net:
+    driver: bridge

@@ -1,0 +1,17 @@
+.business-tables {
+    display: block;
+    div[data-field='name'] {
+        .MuiDataGrid-colCellTitle {
+            padding-left: 25px;
+        }
+    }
+    .MuiTabs-root {
+        .MuiButtonBase-root {
+            padding-top: 15px;
+        }
+        .MuiBadge-root {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
